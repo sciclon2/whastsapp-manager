@@ -14,5 +14,8 @@ WA_WABA_PHONE_ID = "733190389884668"  # WhatsApp Business Account phone number I
 # Service port
 WA_SERVICE_PORT = 7999  # Port to run the Flask service on
 
-# Add more configs as needed
+
+# WhatsApp App Secret for signature validation
+WA_APP_SECRET = "96db5b10f9538098d4329903532c90cc"
+
 LOG_LEVEL = "DEBUG"

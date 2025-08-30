@@ -1,6 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 from src.whatsapp import WhatsAppManager
 from src.logger import Logger
+from src.secret_manager import SecretManager
 
 app = Flask(__name__)
 wa_manager = WhatsAppManager()
@@ -29,6 +30,9 @@ def handle_validation():
         return "Invalid token", 403
 
 def handle_message():
+    # Signature validation using unified SecretManager
+    if not SecretManager.validate_signature(request, logger):
+        abort(403)
     data = request.get_json()
     logger.debug(f"Webhook received: {data}")
     try:
@@ -46,6 +50,5 @@ def handle_message():
 if __name__ == "__main__":
     port = getattr(wa_manager.config, 'WA_SERVICE_PORT', 7999)
     app.run(host="0.0.0.0", port=port)
-
 # For production, run with:
 # gunicorn -w 4 -b 0.0.0.0:7999 src.server:app
